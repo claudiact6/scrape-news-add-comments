@@ -1,0 +1,26 @@
+{
+  "name": "scrape-news-add-comments",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/claudiact6/scrape-news-add-comments.git"
+  },
+  "author": "Claudia Taylor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/claudiact6/scrape-news-add-comments/issues"
+  },
+  "homepage": "https://github.com/claudiact6/scrape-news-add-comments#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.0",
+    "mongoose": "^5.3.15"
+  }
+}
