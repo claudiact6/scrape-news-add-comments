@@ -33,16 +33,23 @@
       </div>
       <div class="modal-body">
         {{#each this.comments}}
-        <div class="row"><p>{{this.username}} says...</p></div>
+        <div class="row">
+          <div class="col-11">
+          <p>{{this.username}} says...</p>
+          </div>
+          <div class="col-1">
+            <span style="color:red" class="delete" id="{{this._id}}">&times;</span>
+          </div>
+          </div>
         <div class="row"><p>{{this.body}}</p></div>
         <hr/>
         {{/each}}
-        <form>
+        <form method="POST" class="commentform" id="{{this._id}}">
           <p>Add your comment</p>
-          <label for="name">Name</label>
-          <input type="text" id="name">
-          <label for="comment">Comment</label>
-          <input type="text" id="comment">
+          <label for="username">Name</label>
+          <input type="text" id="username">
+          <label for="body">Comment</label>
+          <input type="text" id="body">
           <button class="btn btn-primary" type="submit">Send</button>
         </form>
       </div>
@@ -52,7 +59,29 @@
 {{/each}}
 
 <script>
-  Handlebars.registerHelper( 'concat', function(id) {
-    return "#" + id;
-});
+  $(".commentform").on("submit", function(event) {
+    event.preventDefault();
+    console.log($("#username").val(), $("#body").val());
+    $.ajax({
+      url: "/api/notes/"+this.id,
+      method: "POST",
+      data: {
+        username: $("#username").val(),
+        body: $("#body").val()
+      }
+    }).then(function(res) {
+      console.log(res);
+    })
+  });
+
+  $(".delete").on("click", function(event) {
+    event.preventDefault();
+    $.ajax({
+      url:"/api/notes/" + this.id,
+      method: "DELETE"
+    }).then(function(res) {
+      console.log(res);
+    });
+  });
+
 </script>

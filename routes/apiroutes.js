@@ -69,6 +69,15 @@ module.exports = function (app) {
 
   //DELETING ROUTES
   //Delete a comment ("note")
+  app.delete("/api/notes/:noteid", function(req, res) {
+    db.Note.findOneAndDelete({"_id": req.params.noteid})
+    .then(function(note) {
+      res.json(note);
+    })
+    .catch(function (err) {
+      res.json(err);
+    });
+  });
 
 
 
