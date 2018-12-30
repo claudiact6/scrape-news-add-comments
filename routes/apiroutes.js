@@ -32,7 +32,7 @@ module.exports = function (app) {
   app.post("/api/notes/:articleid", function (req, res) {
     db.Note.create(req.body)
       .then(function (newNote) {
-        return db.Article.find({ "_id": req.params.id }, { $push: { "notes": newNote._id } });
+        return db.Article.findOneAndUpdate( {_id: req.params.articleid}, {$push: {comments: newNote._id }});
       })
       .then(function (modifiedArticle) {
         res.json(modifiedArticle);
@@ -43,12 +43,13 @@ module.exports = function (app) {
   });
 
   //RETRIEVING ROUTES 
-  //Get all saved articles
+  //Get all saved articles and order from newest to oldest, populate with notes
   app.get("/api/articles", function (req, res) {
-    db.Article.find({})
-      .then(function (articles) {
-        res.json(articles);
-      })
+    db.Article.find({}).sort({createdAt: 'desc'})
+    .populate("comments")
+    .then(function (populatedArticles) {
+      res.json(populatedArticles);
+    })
       .catch(function (err) {
         res.json(err);
       });
@@ -57,7 +58,7 @@ module.exports = function (app) {
   //Get one article and show comments ("notes")
   app.get("/api/articles/:articleid", function (req, res) {
     db.Article.find({ "_id": req.params.articleid })
-      .populate("note")
+      .populate("comments")
       .then(function (populatedArticle) {
         res.json(populatedArticle);
       })

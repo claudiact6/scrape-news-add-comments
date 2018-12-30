@@ -16,11 +16,13 @@ var ArticleSchema = new Schema({
     required: true,
     unique: true
   },
-  note: {
+  comments: [{
     type: Schema.Types.ObjectId,
     ref: "Note"
-  }
+  }]
 });
+
+ArticleSchema.set("timestamps", true);
 
 var Article = mongoose.model("Article", ArticleSchema);
 
