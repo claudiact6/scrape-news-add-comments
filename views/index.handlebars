@@ -38,7 +38,7 @@
           <p>{{this.username}} says...</p>
           </div>
           <div class="col-1">
-            <span style="color:red" class="delete" id="{{this._id}}">&times;</span>
+            <span style="color:red" class="delete" id="a{{this._id}}">&times;</span>
           </div>
           </div>
         <div class="row"><p>{{this.body}}</p></div>
@@ -47,9 +47,9 @@
         <form method="POST" class="commentform" id="{{this._id}}">
           <p>Add your comment</p>
           <label for="username">Name</label>
-          <input type="text" id="username">
+          <input type="text" id="username-{{this._id}}">
           <label for="body">Comment</label>
-          <input type="text" id="body">
+          <input type="text" id="body-{{this._id}}">
           <button class="btn btn-primary" type="submit">Send</button>
         </form>
       </div>
@@ -61,16 +61,19 @@
 <script>
   $(".commentform").on("submit", function(event) {
     event.preventDefault();
-    console.log($("#username").val(), $("#body").val());
+    var modalid = this.id
+    console.log(modalid);
+    console.log($("#username-"+modalid).val(), $("#body-"+modalid).val());
     $.ajax({
       url: "/api/notes/"+this.id,
       method: "POST",
       data: {
-        username: $("#username").val(),
-        body: $("#body").val()
+        username: $("#username-"+modalid).val(),
+        body: $("#body-"+modalid).val()
       }
     }).then(function(res) {
       console.log(res);
+      location.reload();
     })
   });
 
