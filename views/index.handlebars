@@ -1,6 +1,6 @@
 <div class="jumbotron">
   <h1>Scrape the Times!</h1>
-  <button class="btn">Scrape now</button>
+  <button class="btn" id="scraper">Scrape now</button>
 </div>
 <main class="container">
   <div class="row">
@@ -31,59 +31,88 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body container">
         {{#each this.comments}}
-        <div class="row">
-          <div class="col-11">
-          <p>{{this.username}} says...</p>
+        <div class="commentcontainer">
+          <div class="row">
+            <div class="col-11">
+              <p>{{this.username}} says...</p>
+            </div>
+            <div class="col-1">
+              <span style="color:red" class="delete" id="{{this._id}}">&times;</span>
+            </div>
           </div>
-          <div class="col-1">
-            <span style="color:red" class="delete" id="a{{this._id}}">&times;</span>
+          <div class="row comment">
+            <p>{{this.body}}</p>
           </div>
-          </div>
-        <div class="row"><p>{{this.body}}</p></div>
-        <hr/>
+          <hr />
+        </div>
         {{/each}}
-        <form method="POST" class="commentform" id="{{this._id}}">
-          <p>Add your comment</p>
-          <label for="username">Name</label>
-          <input type="text" id="username-{{this._id}}">
-          <label for="body">Comment</label>
-          <input type="text" id="body-{{this._id}}">
-          <button class="btn btn-primary" type="submit">Send</button>
-        </form>
       </div>
+      <form method="POST" class="commentform" id="{{this._id}}">
+        <p>Add your comment</p>
+        <label for="username">Name</label>
+        <input type="text" id="username-{{this._id}}">
+        <label for="body">Comment</label>
+        <input type="text" id="body-{{this._id}}">
+        <button class="btn btn-primary" type="submit">Send</button>
+      </form>
+
     </div>
   </div>
 </div>
 {{/each}}
 
 <script>
-  $(".commentform").on("submit", function(event) {
-    event.preventDefault();
-    var modalid = this.id
-    console.log(modalid);
-    console.log($("#username-"+modalid).val(), $("#body-"+modalid).val());
-    $.ajax({
-      url: "/api/notes/"+this.id,
-      method: "POST",
-      data: {
-        username: $("#username-"+modalid).val(),
-        body: $("#body-"+modalid).val()
-      }
-    }).then(function(res) {
-      console.log(res);
-      location.reload();
-    })
-  });
+  $(document).ready(function () {
+    $("#scraper").on("click", function (event) {
+      event.preventDefault();
+      $.ajax({
+        url: "/scrape",
+        method: "GET"
+      }).then(function (res) {
+        location.reload();
+      }).catch(function () {
+        alert("No new stories!");
+      });
+    });
 
-  $(".delete").on("click", function(event) {
-    event.preventDefault();
-    $.ajax({
-      url:"/api/notes/" + this.id,
-      method: "DELETE"
-    }).then(function(res) {
-      console.log(res);
+    $(".commentform").on("submit", function (event) {
+      event.preventDefault();
+      var modalid = this.id
+      console.log(modalid);
+      console.log($("#username-" + modalid).val(), $("#body-" + modalid).val());
+      $.ajax({
+        url: "/api/notes/" + this.id,
+        method: "POST",
+        data: {
+          username: $("#username-" + modalid).val(),
+          body: $("#body-" + modalid).val()
+        }
+      }).then(function (res) {
+        $("form").find("input:text").val("");
+        console.log(res);
+        $.ajax({
+          url: "/api/articles/" + res._id,
+          method: "GET"
+        }).then(function (res) {
+          console.log(res[0].comments);
+          console.log(res[0].comments[res[0].comments.length - 1]);
+          $(".modal-body").append(
+            "<div class='commentcontainer'><div class='row'><div class='col-11'><p>" + res[0].comments[res[0].comments.length - 1].username + " says...</p></div><div class='col-1'><span style='color:red' class='delete' id='" + res[0].comments[res[0].comments.length - 1]._id + "''>&times;</span></div></div><div class='row'><p>" + res[0].comments[res[0].comments.length - 1].body + "</p></div><hr /></div>");
+        });
+      });
+    });
+
+    $(".delete").on("click", function (event) {
+      event.preventDefault();
+      $.ajax({
+        url: "/api/notes/" + this.id,
+        method: "DELETE"
+      }).then(function (res) {
+        console.log(res);
+        $("#" + res._id).parent("div").parent("div").parent("div").hide();
+      });
     });
   });
 
