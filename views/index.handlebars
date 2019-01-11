@@ -104,7 +104,7 @@
       });
     });
 
-    $(".delete").on("click", function (event) {
+    $(document).on("click", ".delete", function (event) {
       event.preventDefault();
       $.ajax({
         url: "/api/notes/" + this.id,
