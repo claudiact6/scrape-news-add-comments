@@ -3,7 +3,7 @@ var axios = require("axios");
 module.exports = function (app) {
   app.get("/", function (req, res) {
     var articlesHB;
-    axios.get("/api/articles").then(function(response) {
+    axios.get("https://scrape-news-comment.herokuapp.com/api/articles").then(function(response) {
       articlesHB = {
         articles: response.data
       };
