@@ -9,7 +9,8 @@ var db = require("./models");
 var PORT = process.env.PORT || 3000;
 
 //connect to Mongo
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoNewsScraper";
+var uri = "mongodb://user:passw0rd@ds153304.mlab.com:53304/heroku_bx4ff8tj"
+var MONGODB_URI = uri || "mongodb://localhost/mongoNewsScraper";
 mongoose.connect(MONGODB_URI);
 
 app.use(express.urlencoded({ extended: true }));
