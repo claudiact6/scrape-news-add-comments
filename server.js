@@ -10,7 +10,7 @@ var PORT = process.env.PORT || 3000;
 
 //connect to Mongo
 var uri = "mongodb://user:passw0rd@ds153304.mlab.com:53304/heroku_bx4ff8tj"
-var MONGODB_URI = uri || "mongodb://localhost/mongoNewsScraper";
+var MONGODB_URI = process.env.uri || "mongodb://localhost/mongoNewsScraper";
 mongoose.connect(MONGODB_URI);
 
 app.use(express.urlencoded({ extended: true }));
