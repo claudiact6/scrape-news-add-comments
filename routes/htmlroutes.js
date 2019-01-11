@@ -3,7 +3,7 @@ var axios = require("axios");
 module.exports = function (app) {
   app.get("/", function (req, res) {
     var articlesHB;
-    axios.get("http://localhost:3000/api/articles").then(function(response) {
+    axios.get("/api/articles").then(function(response) {
       articlesHB = {
         articles: response.data
       };
