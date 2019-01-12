@@ -4,7 +4,7 @@ module.exports = function (app) {
   app.get("/", function (req, res) {
     var articlesHB;
     //CHANGE THIS URL BEFORE DEPLOYING AGAIN  
-    axios.get("http://localhost:3000/api/articles").then(function(response) {
+    axios.get("https://scrape-news-comment.herokuapp.com/api/articles").then(function(response) {
       articlesHB = {
         articles: response.data
       };
