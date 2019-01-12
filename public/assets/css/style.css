@@ -1,4 +1,9 @@
 #mainhead {
-  background-image: url("../img/16323.jpg");
-  color: blue;
+  background-image: url("../img/advertisements-batch-blur-518543.jpg");
+  background-size: 100%;
+  color: white;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Merriweather', serif;
 }
